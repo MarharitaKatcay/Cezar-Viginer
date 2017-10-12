@@ -7,18 +7,18 @@
 #include <fstream>
 #include <vector>
 #include <string>
+#include <Shellapi.h>
 using namespace std;
 
 HINSTANCE hInst;
 HWND hwndCOMMON;
-DWORD WINAPI function(void *hEdit) { ExitThread(0); }
 
 BOOL CALLBACK DlgProc(HWND, UINT, WPARAM, LPARAM);
 
 int CALLBACK WinMain(HINSTANCE hInstance, HINSTANCE hPrevInst, LPSTR lpCmdLine, int nCmdShow)
 {
 	hInst = hInstance;
-	DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), 0, (DlgProc), 0);
+	DialogBoxParam(hInstance, MAKEINTRESOURCE(IDD_DIALOG1), 0, (DLGPROC)(DlgProc), 0);
 	return 0;
 }
 
@@ -27,6 +27,7 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	static TCHAR nameOpenText[256] = "", nameEncryptedText[256] = ""; //для имени файла
 	static OPENFILENAME fileOpenText;
 	static vector<string> vOpenText; //вектора для строк из файла
+	static string key = "";
 	ifstream in; //для чтения из файла
 	ofstream out; //для записи в файл
 	string st; //для временной записи строки из файла
@@ -48,6 +49,17 @@ BOOL CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 	case WM_COMMAND:
 		switch (LOWORD(wParam))
 		{
+
+		case IDC_BUTTON_OPEN_CLEAR_FILE: {
+			if(strcmp(nameOpenText,""))
+				ShellExecute(0, 0, "notepad.exe", nameOpenText, 0, SW_SHOW);
+			break;
+		}
+		case IDC_BUTTON_OPEN_ENCRYPTED_FILE: {
+			if (strcmp(nameEncryptedText, ""))
+				ShellExecute(0, 0, "notepad.exe", nameEncryptedText, 0, SW_SHOW);
+			break;
+		}
 
 		case IDC_FILE_OPEN_CLEAR_TEXT: {
 			fileOpenText.lpstrTitle = "Открыть файл с открытым текстом"; //изменение заголовка диалогового окна
