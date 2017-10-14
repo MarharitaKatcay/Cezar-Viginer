@@ -111,6 +111,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="functionsAlg.h" />
     <ClInclude Include="resource.h" />
   </ItemGroup>
   <ItemGroup>
